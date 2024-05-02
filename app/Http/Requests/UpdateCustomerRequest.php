@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\BaseRequest as BaseRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Customer;
 
-class RegisterUserRequest extends BaseRequest
+class UpdateCustomerRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +24,13 @@ class RegisterUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:100',
-            'email' => 'required|email|max:100|unique:users,email',
-            'password' => 'required|min:8',
-            'role' => 'required|max:50|exists:roles,name'
+            'first_name' => 'max:100',
+            'last_name' => 'max:100',
+            'street_address' => 'max:100',
+            'city' => 'max:50',
+            'postal_code' => 'max:10',
+            'phone_no' => 'digits:10|unique:customers,phone_no',
+            'status' => Rule::in([Customer::ACTIVE_STATUS, Customer::INACTIVE_STATUS])
         ];
     }
 }

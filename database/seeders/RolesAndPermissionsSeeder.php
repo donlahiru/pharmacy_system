@@ -33,8 +33,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'update medication',
             'delete medication',
             'view customer',
-            'update medication',
-            'delete medication'
+            'update customer',
+            'delete customer'
         ]);
 
         $role = Role::create(['name' => 'cashier']);
@@ -42,7 +42,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view medication',
             'update medication',
             'view customer',
-            'update medication',
+            'update customer',
         ]);
 
         $role = Role::create(['name' => 'owner']);

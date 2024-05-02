@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\BaseRequest as BaseRequest;
 
-class RegisterUserRequest extends BaseRequest
+class StoreMedicationRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class RegisterUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:100',
-            'email' => 'required|email|max:100|unique:users,email',
-            'password' => 'required|min:8',
-            'role' => 'required|max:50|exists:roles,name'
+            'name' => 'required|max:100|unique:medications,name',
+            'quantity' => 'required|numeric',
         ];
     }
 }

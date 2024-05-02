@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('medications', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 100);
-            $table->string('last_name', 100)->nullable();
-            $table->string('street_address', 100)->nullable();
-            $table->string('city', 50)->nullable();
-            $table->string('postal_code', 10)->nullable();
-            $table->string('phone_no', 10)->nullable();
+            $table->string('name', 100);
+            $table->text('description')->nullable();
+            $table->integer('quantity');
             $table->enum('status',array('active', 'inactive'))->default('active');
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('medications');
     }
 };

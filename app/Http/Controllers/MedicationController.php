@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Requests\StoreMedicationRequest;
+use App\Http\Requests\UpdateMedicationRequest;
+use App\Models\Medication;
 
-
-class CustomerController extends Controller
+class MedicationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:view customer'], ['only' => ['index', 'show']]);
-        $this->middleware(['permission:create customer'], ['only' => ['store']]);
-        $this->middleware(['permission:update customer'], ['only' => ['update']]);
-        $this->middleware(['permission:delete customer'], ['only' => ['delete']]);
-        $this->middleware(['permission:p_delete customer'], ['only' => ['destroy']]);
+        $this->middleware(['permission:view medication'], ['only' => ['index', 'show']]);
+        $this->middleware(['permission:create medication'], ['only' => ['store']]);
+        $this->middleware(['permission:update medication'], ['only' => ['update']]);
+        $this->middleware(['permission:delete medication'], ['only' => ['delete']]);
+        $this->middleware(['permission:p_delete medication'], ['only' => ['destroy']]);
     }
 
     /**
@@ -24,7 +23,7 @@ class CustomerController extends Controller
 
     public function index()
     {
-        $data = Customer::latest()->paginate(10);
+        $data = Medication::latest()->paginate(10);
 
         return response()->json([
             'status' => false,
@@ -40,43 +39,42 @@ class CustomerController extends Controller
 
     public function show($id)
     {
-        $customer = Customer::find($id);
+        $medication = Medication::find($id);
 
         return response()->json([
             'status' => false,
-            'customer' => $customer,
+            'medication' => $medication,
         ], 200);
     }
 
     /**
-     * @param StoreCustomerRequest $request
+     * @param StoreMedicationRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function store(StoreCustomerRequest $request)
+    public function store(StoreMedicationRequest $request)
     {
         try {
-
-            $customer = new Customer();
-            foreach ($customer->getFillable() as $key => $value) {
+            $medication = new Medication();
+            foreach ($medication->getFillable() as $key => $value) {
                 switch ($value) {
                     case 'status':
-                        $customer->$value = $customer::ACTIVE_STATUS;
+                        $medication->$value = $medication::ACTIVE_STATUS;
                         break;
                     case 'created_by':
-                        $customer->$value = auth()->user()->id;
+                        $medication->$value = auth()->user()->id;
                         break;
                     default:
-                        $customer->$value = $request->$value;
+                        $medication->$value = $request->$value;
                         break;
                 }
             }
 
-            if ($customer->save()) {
+            if ($medication->save()) {
                 return response()->json([
                     'status' => true,
-                    'customer_id' => $customer->id,
-                    'message' => 'Customer created successfully.',
+                    'medication_id' => $medication->id,
+                    'message' => 'Medication created successfully.',
                 ], 200);
             }
 
@@ -90,31 +88,31 @@ class CustomerController extends Controller
     }
 
     /**
-     * @param UpdateCustomerRequest $request
+     * @param UpdateMedicationRequest $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function update(UpdateCustomerRequest $request, $id)
+    public function update(UpdateMedicationRequest $request, $id)
     {
         try {
-            $customer = Customer::find($id);
+            $medication = Medication::find($id);
 
-            foreach ($customer->getFillable() as $key => $value) {
+            foreach ($medication->getFillable() as $key => $value) {
                 switch ($value) {
                     case 'updated_by':
-                        $customer->$value = auth()->user()->id;
+                        $medication->$value = auth()->user()->id;
                         break;
                     default:
-                        $customer->$value = $request->$value ? $request->$value : $customer->$value;
+                        $medication->$value = $request->$value ? $request->$value : $medication->$value;
                         break;
                 }
             }
 
-            if ($customer->save()) {
+            if ($medication->save()) {
                 return response()->json([
                     'status' => true,
-                    'message' => 'Customer updated successfully.',
+                    'message' => 'Medication updated successfully.',
                 ], 200);
             }
 
@@ -134,11 +132,11 @@ class CustomerController extends Controller
     public function delete($id)
     {
         try {
-            Customer::find($id)->delete();
+            Medication::find($id)->delete();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Customer deleted successfully.',
+                'message' => 'Medication deleted successfully.',
             ], 200);
 
         } catch (\Exception $e) {
@@ -158,11 +156,11 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         try {
-            Customer::withTrashed()->find($id)->forceDelete();
+            Medication::withTrashed()->find($id)->forceDelete();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Customer permanently deleted successfully.',
+                'message' => 'Medication permanently deleted successfully.',
             ], 200);
 
         } catch (\Exception $e) {

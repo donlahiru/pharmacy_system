@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\BaseRequest as BaseRequest;
+use App\Models\Medication;
+use Illuminate\Validation\Rule;
 
-class RegisterUserRequest extends BaseRequest
+class UpdateMedicationRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +24,9 @@ class RegisterUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:100',
-            'email' => 'required|email|max:100|unique:users,email',
-            'password' => 'required|min:8',
-            'role' => 'required|max:50|exists:roles,name'
+            'name' => 'max:100',
+            'quantity' => 'required|numeric',
+            'status' => Rule::in([Medication::ACTIVE_STATUS, Medication::INACTIVE_STATUS])
         ];
     }
 }
